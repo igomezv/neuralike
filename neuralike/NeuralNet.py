@@ -13,7 +13,7 @@ import torch
 from torch import nn
 from torchinfo import summary
 from torch_optimizer import AdaBound
-# from pytorchtools import EarlyStopping
+from .pytorchtools import EarlyStopping
 
 
 class NeuralNet:
@@ -41,17 +41,6 @@ class NeuralNet:
             self.model = self.load_model()
             self.model.summary()
         else:
-
-            # percentage = 0.05
-            nrows, ncols = X.shape
-            # noise_x = np.zeros(X.shape)
-            # for col in range(ncols):
-            #     noise_x[:, col] = np.random.normal(0, X[:, col].std(), nrows) * percentage
-            # noise_y = np.random.normal(0, Y.std(), Y.shape) * percentage
-            # X_r = X + noise_x
-            # Y_r = Y + noise_y
-            # X = np.concatenate((X_r, X), axis=0)
-            # Y = np.concatenate((Y_r, Y), axis=0)
             ntrain = int(psplit * len(X))
             indx = [ntrain]
             shuffle = np.random.permutation(len(X))
@@ -83,31 +72,27 @@ class NeuralNet:
         # optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
         # optimizer = torch.optim.Adadelta(self.model.parameters(), lr=self.learning_rate, weight_decay=0.05)
         # optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, momentum=0.9, weight_decay=1e-5)
-        optimizer = AdaBound(self.model.parameters(), lr=self.learning_rate, final_lr=0.01, weight_decay=1e-10)
+        optimizer = AdaBound(self.model.parameters(), lr=self.learning_rate, final_lr=0.01, weight_decay=1e-10, gamma=0.1)
         # optimizer = torch.optim.Adagrad(self.model.parameters(), lr=self.learning_rate,
         #                                 lr_decay=0, weight_decay=0, initial_accumulator_value=0, eps=1e-10)
         # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', factor=0.05, patience=5)
-        # try:
+        # it needs pytorch utilities
         summary(self.model)
         t0 = time()
         # Run the training loop
         history_train = np.empty((1,))
         history_val = np.empty((1,))
+        # initialize the early_stopping object
+        early_stopping = EarlyStopping(patience=self.patience, verbose=True)
         for epoch in range(0, self.epochs):
-            # Print epoch
-            # print(f'Starting epoch {epoch + 1}', end=' ')
-
             # Set current loss value
             current_loss = 0.0
-
             # Iterate over the DataLoader for training data
             for i, data in enumerate(trainloader, 0):
-
                 # Get and prepare inputs
                 inputs, targets = data
                 inputs, targets = inputs.float(), targets.float()
                 targets = targets.reshape((targets.shape[0], 1))
-
                 # Zero the gradients
                 optimizer.zero_grad()
 
@@ -148,6 +133,13 @@ class NeuralNet:
             print('Epoch: {}/{} | Training Loss: {:.5f} | Validation Loss:'
                   '{:.5f}'.format(epoch+1, self.epochs, loss.item(), valid_loss.item()), end='\r')
         # Process is complete.
+            # early_stopping needs the validation loss to check if it has decresed,
+            # and if it has, it will make a checkpoint of the current model
+            early_stopping(valid_loss, self.model)
+
+            if early_stopping.early_stop:
+                print("Early stopping")
+                break
         tf = time() - t0
         print('\nTraining process has finished in {:.3f} minutes.'.format(tf/60))
         self.history = {'loss': history_train, 'val_loss': history_val}
@@ -167,8 +159,8 @@ class NeuralNet:
             plt.yscale('log')
         plt.title('MSE train: {:.4f} | MSE val: {:.4f} | '
                   'MSE test: {:.4f}'.format(self.loss_train[-1],
-                                             self.loss_val[-1],
-                                             self.test_mse()))
+                                            self.loss_val[-1],
+                                            self.test_mse()))
         plt.ylabel('loss function')
         plt.xlabel('epoch')
         plt.xlim(0, self.epochs)
@@ -228,7 +220,7 @@ class MLP(nn.Module):
             nn.Linear(numneurons, noutput)
         )
         # use the modules apply function to recursively apply the initialization
-        self.model.apply(self.init_normal)
+        self.model.apply(self.init_weights)
 
     def forward(self, x):
         '''
@@ -236,7 +228,7 @@ class MLP(nn.Module):
         '''
         return self.model(x)
 
-    def init_normal(self, m):
+    def init_weights(self, m):
         if type(m) == nn.Linear:
             nn.init.xavier_normal_(m.weight)
 
