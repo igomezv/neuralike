@@ -188,11 +188,10 @@ class NeuralNet:
 
 
 class LoadDataSet:
-    '''
-    Prepare the dataset for regression
-    '''
-
     def __init__(self, X, y, scale_data=False):
+        """
+        Prepare the dataset for regression
+        """
         if not torch.is_tensor(X) and not torch.is_tensor(y):
             # # Apply scaling if necessary
             # if scale_data:
@@ -208,13 +207,12 @@ class LoadDataSet:
 
 
 class MLP(nn.Module):
-    '''
-    Multilayer Perceptron for regression.
-    '''
-
     def __init__(self, ncols, noutput, numneurons=200, dropout=0.1):
+        """
+            Multilayer Perceptron for regression.
+        """
         super().__init__()
-        self.layers = nn.Sequential(
+        self.model = nn.Sequential(
             nn.Linear(ncols, numneurons),
             # nn.SELU(),
             nn.ReLU(),
@@ -229,12 +227,18 @@ class MLP(nn.Module):
             nn.Dropout(dropout),
             nn.Linear(numneurons, noutput)
         )
+        # use the modules apply function to recursively apply the initialization
+        self.model.apply(self.init_normal)
 
     def forward(self, x):
         '''
           Forward pass
         '''
-        return self.layers(x)
+        return self.model(x)
+
+    def init_normal(self, m):
+        if type(m) == nn.Linear:
+            nn.init.xavier_normal_(m.weight)
 
 
 class L1(torch.nn.Module):
@@ -264,5 +268,3 @@ class L1(torch.nn.Module):
     def forward(self, *args, **kwargs):
         # Simply forward and args and kwargs to module
         return self.module(*args, **kwargs)
-
-
