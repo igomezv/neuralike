@@ -26,13 +26,12 @@ class NeuralManager:
     # def __init__(self, loglikelihood, samples, likes,
     #              rootname='neural', neuralike_settings=None):
     def __init__(self, loglikelihood, samples, likes, rootname='neural',
-                 pool=None, neuralike_settings=None):
+                 neuralike_settings=None):
         self.loglikelihood_fn = loglikelihood
         self.valid = False
         self.fig_path = '{}.png'.format(rootname)
         self.samples = samples
         self.likes = likes
-        self.pool = pool
         if neuralike_settings:
             self.learning_rate = neuralike_settings['learning_rate']
             self.batch_size = neuralike_settings['batch_size']
@@ -66,14 +65,14 @@ class NeuralManager:
         # else:
         #     self.neural_model = self.load()
 
-    def training(self):
+    def training(self, map_fn=map):
         ml_idx = np.argmax(self.likes)
         means = self.samples[ml_idx, :]
         print("\nGenerating training set...")
         rsampling = RandomSampling(self.loglikelihood_fn, means=means, mins=np.max(self.samples, axis=0),
                                    maxs=np.max(self.samples, axis=0),
-                                   nrand=self.nrand, pool=self.pool)
-        rsamples, rlikes = rsampling.make_dataset()
+                                   nrand=self.nrand)
+        rsamples, rlikes = rsampling.make_dataset(map_fn=map_fn)
         print("Training dataset created!")
         likes = np.append(rlikes, self.likes)
         samples = np.append(rsamples, self.samples, axis=0)

@@ -5,7 +5,7 @@ import time
 
 class RandomSampling:
     # def __init__(self, like, means, cov, nrand=10, pool=None, files_path='randomsampling'):
-    def __init__(self, like, means, mins, maxs, nrand=10, pool=None, files_path='randomsampling'):
+    def __init__(self, like, means, mins, maxs, nrand=10, files_path='randomsampling'):
         """
         Create a random samples in the parameter space and evaluate the likelihood in them.
         This is used to generate the training set for a neural network.
@@ -24,12 +24,7 @@ class RandomSampling:
         self.dims = len(mins)
         # self.cov = cov
         self.nrand = nrand
-        self.pool = pool
         self.files_path = files_path
-        if pool:
-            self.M = pool.map
-        else:
-            self.M = map
         print("\nGenerating a random sample of points in the parameter space...")
 
     def make_sample(self):
@@ -43,13 +38,12 @@ class RandomSampling:
         # for i in range(self.dims):
         d1 = np.abs(self.means-self.mins)
         d2 = np.abs(self.means-self.maxs)
-        std = np.abs(d2-d1)/4
+        std = min(d2, d1)/2
         samples = np.random.normal(loc=self.means, scale=std, size=(self.nrand, self.dims))
         print("Random samples in the parameter space generated!")
         return samples
 
-
-    def make_dataset(self):
+    def make_dataset(self, map_fn=map):
         """
         Evaluate the Likelihood function on the grid
         Returns
@@ -60,13 +54,9 @@ class RandomSampling:
         t1 = time.time()
         # if not self.filesChecker():
         print("Evaluating likelihoods...")
-        likes = np.array(list(self.M(self.like, samples)))
+        likes = np.array(list(map_fn(self.like, samples)))
         tf = time.time() - t1
         print("Time of {} likelihood evaluations {:.4f} min".format(len(likes), tf/60))
-        if self.pool:
-            self.pool.close()
-        # print("Time of evaluating {} likelihoods with apply_along_axis: {:.4} s".format(len(likes), tf))
-
         return samples, likes
 
     # def filesChecker(self):

@@ -33,9 +33,9 @@ class NeuraLike:
         self.neuralike_settings = neuralike_settings
 
     def run(self, delta_logz, it, nc, samples, likes, nsize=10,
-            absdiff_criterion=None, map_fn=map, logl_tolerance=0.1):
+            absdiff_criterion=None, map_fn=None, logl_tolerance=0.1):
         if self.training_flag(delta_logz, it):
-            self.train(samples, likes)
+            self.train(samples, likes, map_fn=map_fn)
         if self.trained_net:
             self.neural_switch(nc, samples, likes, nsize=nsize,
                                absdiff_criterion=absdiff_criterion, map_fn=map_fn,
@@ -68,13 +68,13 @@ class NeuraLike:
         else:
             return False
 
-    def train(self, samples, likes):
+    def train(self, samples, likes, map_fn=map):
         self.net = NeuralManager(loglikelihood=self.loglikelihood_control,
                                  samples=samples,
                                  likes=likes,
                                  rootname=self.rootname,
                                  neuralike_settings=self.neuralike_settings)
-        self.net.training()
+        self.net.training(map_fn=map_fn)
         self.train_counter += 1
         self.trained_net = self.net.valid
         self.originalike_counter = 0
@@ -95,12 +95,13 @@ class NeuraLike:
                 real_logl = np.array(list(map_fn(self.loglikelihood_control,
                                                  samples_test)))
 
-                flag_test = self.test_predictions(neuralikes_test, real_logl,
-                                                  nsize=nsize, absdiff_criterion=absdiff_criterion,
-                                                  logl_tolerance=logl_tolerance)
-                self.trained_net = False
-                if flag_test is False:
-                    print("\nBad neuralike predictions")
+                pred_test = self.test_predictions(neuralikes_test, real_logl,
+                                                 nsize=nsize, absdiff_criterion=absdiff_criterion,
+                                                 logl_tolerance=logl_tolerance)
+                if pred_test:
+                    self.trained_net = True
+                else:
+                    self.trained_net = False
         return None
 
     def likelihood(self, params):
@@ -130,4 +131,5 @@ class NeuraLike:
         if absdiff <= absdiff_criterion:
             return True
         else:
+            print("Bad neuralike predictions!")
             return False
