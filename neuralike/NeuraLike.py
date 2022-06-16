@@ -45,11 +45,11 @@ class NeuraLike:
                "neural trains: {} | Using: ".format(self.ncalls_neural, self.n_neuralikes,
                                                     self.train_counter)
         if self.trained_net:
-            print(info+'Neural')
+            print(info+'Neuralike')
         else:
             if self.train_counter > 0:
                 self.originalike_counter += 1
-            print(info+'Original {}-aft'.format(self.originalike_counter))
+            print(info+'Original_fn {}-aft'.format(self.originalike_counter))
         return None
 
     def training_flag(self, delta_logz, it):
