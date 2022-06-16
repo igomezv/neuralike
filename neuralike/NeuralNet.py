@@ -70,9 +70,9 @@ class NeuralNet:
         # loss_function = nn.L1Loss()
         loss_function = nn.MSELoss()
         # optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
-        # optimizer = torch.optim.Adadelta(self.model.parameters(), lr=self.learning_rate, weight_decay=0.05)
+        optimizer = torch.optim.Adadelta(self.model.parameters(), lr=self.learning_rate, weight_decay=1e-5)
         # optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, momentum=0.9, weight_decay=1e-5)
-        optimizer = AdaBound(self.model.parameters(), lr=self.learning_rate, final_lr=0.01, weight_decay=1e-10, gamma=0.1)
+        # optimizer = AdaBound(self.model.parameters(), lr=self.learning_rate, final_lr=0.01, weight_decay=1e-10, gamma=0.1)
         # optimizer = torch.optim.Adagrad(self.model.parameters(), lr=self.learning_rate,
         #                                 lr_decay=0, weight_decay=0, initial_accumulator_value=0, eps=1e-10)
         # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', factor=0.05, patience=5)
@@ -83,7 +83,7 @@ class NeuralNet:
         history_train = np.empty((1,))
         history_val = np.empty((1,))
         # initialize the early_stopping object
-        early_stopping = EarlyStopping(patience=self.patience, verbose=True)
+        early_stopping = EarlyStopping(patience=self.patience, verbose=False)
         for epoch in range(0, self.epochs):
             # Set current loss value
             current_loss = 0.0
