@@ -69,8 +69,8 @@ class NeuralNet:
         # Define the loss function and optimizer
         # loss_function = nn.L1Loss()
         loss_function = nn.MSELoss()
-        # optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
-        optimizer = torch.optim.Adadelta(self.model.parameters(), lr=self.learning_rate, weight_decay=1e-5)
+        optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
+        # optimizer = torch.optim.Adadelta(self.model.parameters(), lr=self.learning_rate, weight_decay=1e-5)
         # optimizer = torch.optim.SGD(self.model.parameters(), lr=self.learning_rate, momentum=0.9, weight_decay=1e-5)
         # optimizer = AdaBound(self.model.parameters(), lr=self.learning_rate, final_lr=0.01, weight_decay=1e-10, gamma=0.1)
         # optimizer = torch.optim.Adagrad(self.model.parameters(), lr=self.learning_rate,
