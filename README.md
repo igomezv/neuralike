@@ -1,4 +1,5 @@
-# neural_bayesian
+# neuralike
+## Using machine learning to speed-up Bayesian inference.
 
 Recomended optimizer is Adam with learning rate = 1e-4.
 
