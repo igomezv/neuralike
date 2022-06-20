@@ -111,7 +111,7 @@ class NeuraLike:
 
     # @staticmethod
     def test_predictions(self, samples_test, y_pred, nsize=10, absdiff_criterion=None, logl_tolerance=0.1, map_fn=map):
-        print("\nTesting neuralike predictions...")
+        print("\n\nTesting neuralike predictions...")
         nlen = len(y_pred)
         y_pred = y_pred.reshape(nlen, 1)
         idx_shuffle = np.random.permutation(nlen)
@@ -130,6 +130,7 @@ class NeuraLike:
         print("Absolute difference criterion: {:.4f}".format(absdiff_criterion))
 
         if absdiff <= absdiff_criterion:
+            print("Nice neuralike predictions!")
             return True
         else:
             print("Bad neuralike predictions!")
