@@ -22,9 +22,6 @@ class NeuralManager:
         epochs
         plot
     """
-
-    # def __init__(self, loglikelihood, samples, likes,
-    #              rootname='neural', neuralike_settings=None):
     def __init__(self, loglikelihood, samples, likes, rootname='neural',
                  neuralike_settings=None):
         self.loglikelihood_fn = loglikelihood
@@ -135,26 +132,3 @@ class NeuralManager:
         likes = self.likes_scaler.inverse_transform(pred.reshape(-1, 1))
         likes = np.array(likes)
         return likes
-
-    # def test_neural(self, y_pred, y_real, nsize=10, absdiff_criterion=None):
-    #     if absdiff_criterion is None:
-    #         absdiff_criterion = (1/self.perc_tolerance)*np.min(np.abs(self.likes))
-    #     nlen = len(y_pred)
-    #     # if y_pred.shape != y_real.shape:
-    #     y_pred = y_pred.reshape(nlen, 1)
-    #     y_real = y_real.reshape(nlen, 1)
-    #
-    #     shuffle = np.random.permutation(nlen)
-    #
-    #     y_pred = y_pred[shuffle][-nsize:]
-    #     y_real = y_real[shuffle][-nsize:]
-    #
-    #     absdiff = np.mean((np.abs(y_real - y_pred)))
-    #     # diff_mean = np.mean(np.abs(y_real - y_pred))
-    #     print("Absolute difference in the test set: {:.4f}".format(absdiff))
-    #     # print("diff mean in test set: {:.8f}".format(diff_mean))
-    #     print("Absolute difference criterion: {:.4f}".format(absdiff_criterion))
-    #     if absdiff <= absdiff_criterion:
-    #         return True
-    #     else:
-    #         return False
