@@ -2,7 +2,7 @@
 
 ## Using machine learning to speed-up Bayesian inference.
 
-This algorithm was tested with nested sampling algorithms included in dynesty library. We implement this code within the SimpleMC cosmological parameter estimation package.
+This algorithm was use sampling algorithms included in dynesty library. We implement this code within the SimpleMC cosmological parameter estimation package.
 
 Recomended optimizer is Adam with learning rate = 1e-4.
 
