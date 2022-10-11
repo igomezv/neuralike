@@ -32,13 +32,14 @@ class NeuraLike:
         self.rootname = rootname
         self.neuralike_settings = neuralike_settings
 
-    def run(self, delta_logz, it, nc, samples, likes, nsize=10,
-            absdiff_criterion=None, map_fn=None, logl_tolerance=0.1):
+    def run(self, delta_logz, it, nc, samples, likes,
+            map_fn=None, perctest=0.1, logl_tolerance=0.05):
         if self.training_flag(delta_logz, it):
             self.train(samples, likes, map_fn=map_fn)
         if self.trained_net:
-            self.neural_switch(nc, samples, likes, nsize=nsize,
-                               absdiff_criterion=absdiff_criterion, map_fn=map_fn,
+            self.neural_switch(nc, samples, likes,
+                               map_fn=map_fn,
+                               perctest=perctest,
                                logl_tolerance=logl_tolerance)
 
         info = "\nneural calls: {} | neuralikes: {} | "\
@@ -80,8 +81,8 @@ class NeuraLike:
         self.originalike_counter = 0
         return None
 
-    def neural_switch(self, nc, samples, likes, nsize=10, absdiff_criterion=None,
-                      map_fn=map, logl_tolerance=0.1):
+    def neural_switch(self, nc, samples, likes, map_fn=map,
+                      perctest=0.1, logl_tolerance=0.05):
         self.n_neuralikes += 1
         self.ncalls_neural += nc
         if nc > 1000:
@@ -95,7 +96,7 @@ class NeuraLike:
             #                                  samples_test)))
 
             pred_test = self.test_predictions(samples_test, neuralikes_test,
-                                             nsize=nsize, absdiff_criterion=absdiff_criterion,
+                                             perctest=perctest,
                                              logl_tolerance=logl_tolerance, map_fn=map_fn)
             if pred_test:
                 self.trained_net = True
@@ -110,26 +111,25 @@ class NeuraLike:
             return self.loglikelihood_control(params)
 
     # @staticmethod
-    def test_predictions(self, samples_test, y_pred, nsize=10, absdiff_criterion=None, logl_tolerance=0.1, map_fn=map):
+    def test_predictions(self, samples_test, y_pred, perctest=0.1, logl_tolerance=0.2, map_fn=map):
         print("\n\nTesting neuralike predictions...")
         nlen = len(y_pred)
+        nsize = int(perctest*nlen)
+        print("Using {} points to testing".format(nsize))
         y_pred = y_pred.reshape(nlen, 1)
         idx_shuffle = np.random.permutation(nlen)
         idx_red = idx_shuffle[:nsize]
         y_pred = y_pred[idx_red]
-        samples_test = samples_test[idx_red]
+        samples_test = samples_test[    idx_red]
         y_real = np.array(list(map_fn(self.loglikelihood_control, samples_test)))
         y_real = y_real.reshape(-1, 1)
-        absdiff = np.mean((np.abs(y_real - y_pred)))
-
-        if absdiff_criterion is None:
-            ref_val = np.min(abs(y_real))
-            absdiff_criterion = logl_tolerance * ref_val
-
-        print("Absolute difference in the test set: {:.4f}".format(absdiff))
-        print("Absolute difference criterion: {:.4f}".format(absdiff_criterion))
-
-        if absdiff <= absdiff_criterion:
+        absdiff = np.abs(y_real - y_pred)
+        absdiff_criterion = np.abs(logl_tolerance * y_real)
+        comparison = absdiff <= absdiff_criterion
+        count_trues = np.count_nonzero(comparison)
+        criterion = int(0.9*nsize)
+        print("Good predictions {}/{}, requiriment: {}".format(count_trues, nsize, criterion))
+        if count_trues >= criterion:
             print("Nice neuralike predictions!")
             return True
         else:
