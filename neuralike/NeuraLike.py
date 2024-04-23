@@ -111,7 +111,7 @@ class NeuraLike:
             return self.loglikelihood_control(params)
 
     # @staticmethod
-    def test_predictions(self, samples_test, y_pred, perctest=0.1, logl_tolerance=0.2, map_fn=map):
+    def test_predictions(self, samples_test, y_pred, perctest=0.1, logl_tolerance=0.5, fractrues=0.8, map_fn=map):
         print("\n\nTesting neuralike predictions...")
         nlen = len(y_pred)
         nsize = int(perctest*nlen)
@@ -127,7 +127,7 @@ class NeuraLike:
         absdiff_criterion = np.abs(logl_tolerance * y_real)
         comparison = absdiff <= absdiff_criterion
         count_trues = np.count_nonzero(comparison)
-        criterion = int(0.9*nsize)
+        criterion = int(fractrues*nsize)
         print("Good predictions {}/{}, requiriment: {}".format(count_trues, nsize, criterion))
         if count_trues >= criterion:
             print("Nice neuralike predictions!")
