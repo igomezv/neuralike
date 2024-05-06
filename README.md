@@ -16,4 +16,6 @@ In this paper, we present a novel approach to accelerate the Bayesian inference 
     - **pytorchtools.py**.- Methods and utilities for PyTorch.
 
 
+## Usage
 
+In the branch **neuralike** of the repository https://github.com/igomezv/simplemc_tests/tree/neuralike it is available neuralike integrated within the dynesty library for nested sampling. 
