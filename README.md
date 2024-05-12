@@ -1,5 +1,5 @@
-<a href="https://arxiv.org/abs/2402.18124">
-  <img src="https://img.shields.io/badge/arXiv-2402.18124-b31b1b.svg" alt="arXiv:2402.18124">
+<a href="https://arxiv.org/abs/2405.03293">
+  <img src="https://img.shields.io/badge/arXiv-2405.03293-b31b1b.svg" alt="arXiv:2405.03293">
 </a>
 
 # neuralike
