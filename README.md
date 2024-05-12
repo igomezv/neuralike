@@ -36,7 +36,6 @@ We based or inspired our work on the following external codes:
 - https://deap.readthedocs.io/en/master
 - https://pytorch.org
 - https://igomezv.github.io/SimpleMC
-- https://github.com/igomezv/Nnogada
 
 ## Citation
 
