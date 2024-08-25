@@ -20,7 +20,7 @@ Code of our paper *Deep Learning and genetic algorithms for cosmological Bayesia
 
 ## Usage
 
-In the branch **neuralike** of the repository https://github.com/igomezv/simplemc_tests/tree/neuralike it is available neuralike integrated within the dynesty library for nested sampling within the SimpleMC cosmological parameter estimation code (https://igomezv.github.io/SimpleMC/).
+In the branch **neuralike** of the repository https://github.com/igomezv/simplemc_tests it is available neuralike integrated within the dynesty library for nested sampling within the SimpleMC cosmological parameter estimation code (https://igomezv.github.io/SimpleMC/).
 
 ## Acknowledgments
 
