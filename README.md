@@ -6,7 +6,7 @@
 
 ## Deep Learning and Genetic Algorithms for Cosmological Bayesian Inference Speed-up
 
-Code of our paper *Deep Learning and genetic algorithms for cosmological Bayesian inference speed-up*, preprint available in https://arxiv.org/abs/2405.03293.
+Code of our paper *Deep Learning and genetic algorithms for cosmological Bayesian inference speed-up*, accepted in Physical Review D, available at https://arxiv.org/abs/2405.03293.
 
 ## Repository Structure
 
