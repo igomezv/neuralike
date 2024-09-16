@@ -24,14 +24,20 @@ In the branch **neuralike** of the repository https://github.com/igomezv/simplem
 
 ## Acknowledgments
 
-We based or inspired our work on the following external codes:
+We based our work on the following external codes:
 
-- https://dynesty.readthedocs.io/en/stable
-- https://github.com/DarkMachines/pyBAMBI
-- https://arxiv.org/abs/1110.2997
-- https://deap.readthedocs.io/en/master
-- https://pytorch.org
-- https://igomezv.github.io/SimpleMC
+- Philosophy of the method
+  - https://arxiv.org/abs/1110.2997
+  - https://github.com/DarkMachines/pyBAMBI
+- Nested sampling library
+  - https://dynesty.readthedocs.io/en/stable
+- Cosmological parameter estimation
+  - https://igomezv.github.io/SimpleMC
+- Genetic algorithms library
+  - https://deap.readthedocs.io/en/master
+- Deep learning library
+  - https://pytorch.org
+
 
 ## Citation
 
@@ -46,7 +52,7 @@ If you use this work in your research, please cite:
 }
 ```
 
-If you find useful our [`nnogada`](https://github.com/igomezv/Nnogada) framework:
+If you find useful our [`nnogada`](https://github.com/igomezv/Nnogada) framework for hyperparameter tuning of neural networks with genetic algorithms:
 
 ```bibtex
 @article{nnogada,
