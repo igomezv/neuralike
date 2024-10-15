@@ -6,7 +6,7 @@
 
 ## Deep Learning and Genetic Algorithms for Cosmological Bayesian Inference Speed-up
 
-Code of our paper *Deep Learning and genetic algorithms for cosmological Bayesian inference speed-up*, accepted in Physical Review D, available at https://arxiv.org/abs/2405.03293.
+Code of our paper *Deep Learning and genetic algorithms for cosmological Bayesian inference speed-up*, Physical Review D, 110(8) 083518. Available at https://arxiv.org/abs/2405.03293.
 
 ## Repository Structure
 
@@ -44,11 +44,19 @@ We based our work on the following external codes:
 If you use this work in your research, please cite:
 
 ```bibtex
-@article{neuralike,
-  title={Deep Learning and genetic algorithms for cosmological Bayesian inference speed-up},
-  author={G{\'o}mez-Vargas, Isidro and V{\'a}zquez, J Alberto},
-  journal={arXiv preprint arXiv:2405.03293},
-  year={2024}
+@article{gomez2024neuralike,
+  title = {Deep learning and genetic algorithms for cosmological Bayesian inference speed-up},
+  author = {G\'omez-Vargas, Isidro and V\'azquez, J. Alberto},
+  journal = {Phys. Rev. D},
+  volume = {110},
+  issue = {8},
+  pages = {083518},
+  numpages = {15},
+  year = {2024},
+  month = {Oct},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevD.110.083518},
+  url = {https://link.aps.org/doi/10.1103/PhysRevD.110.083518}
 }
 ```
 
